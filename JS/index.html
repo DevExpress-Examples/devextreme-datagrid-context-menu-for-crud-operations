@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="css/dx.spa.css" />
+    <link rel="dx-theme" data-theme="generic.light" href="css/dx.light.css" data-active="true" />
+
+    <title>dxDataGrid widget</title>
+
+    <!-- Framework -->
+    <script type="text/javascript" src="lib/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="lib/globalize.min.js"></script>
+    <script type="text/javascript" src="lib/dx.webappjs.js"></script>
+
+    <script type="text/javascript" src="data.js"></script>
+
+    <!-- CSS -->
+    <!-- JS code -->
+    <script type="text/javascript">
+ 
+        $(document).ready(function () {
+            var gridContextMenu = $("<div>").dxContextMenu({
+                invokeOnlyFromCode: true
+            }).appendTo("body").dxContextMenu("instance");
+
+            $("#gridContainer").dxDataGrid({
+                dataSource: employees,
+                paging: {
+                    pageSize: 6
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [5, 10, 20]
+                },
+                editing: {
+                    editMode: 'row',
+                    editEnabled: true
+                },
+                rowPrepared: function($row, rowOptions) {
+                    $row.on("contextmenu", function(e) {
+                        gridContextMenu.option({
+                            items: [
+                              { text: 'edit' },
+                              { text: 'insert' },
+                              { text: 'delete' }
+                            ],
+                            itemClickAction: function (options) {
+                                switch(options.itemData.text) {
+                                    case "edit":
+                                        $("#gridContainer").dxDataGrid("instance").editRow(rowOptions.rowIndex);
+                                        break;
+                                    case "insert":
+                                        $("#gridContainer").dxDataGrid("instance").insertRow();
+                                        break;
+                                    case "delete":
+                                        $("#gridContainer").dxDataGrid("instance").removeRow(rowOptions.rowIndex);
+                                        break;
+
+                                }
+                            }
+                        });
+                        gridContextMenu.show(e);
+                        e.preventDefault();
+                    });
+                },
+                columns: ['FirstName', 'LastName', 'Title', 'City', 'Country']
+            });
+        })
+
+
+    </script>
+</head>
+<body>
+
+    <div id="gridContainer"></div>
+
+</body>
+</html>
