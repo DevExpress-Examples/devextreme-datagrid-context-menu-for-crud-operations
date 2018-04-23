@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="css/dx.spa.css" />
+    <link rel="dx-theme" data-theme="generic.light" href="css/dx.light.css" data-active="true" />
+
+    <title>UI widget</title>
+
+    <!-- Framework -->
+    <script type="text/javascript" src="lib/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="lib/globalize.min.js"></script>
+    <script type="text/javascript" src="lib/dx.all.js"></script>
+
+    <script type="text/javascript" src="data.js"></script>
+
+    <!-- JS code -->
+    <script type="text/javascript">
+
+        $(function () {
+
+            var gridContextMenu = $("<div>").dxContextMenu({
+            }).appendTo("body").dxContextMenu("instance"),
+
+            getContextMenuItems = function ($targetElement) {
+                if (!$targetElement.closest(".dx-datagrid-headers").length) {
+                    if ($targetElement.closest(".dx-datagrid").length) {
+                        return [
+                            { text: 'edit' },
+                            { text: 'insert' },
+                            { text: 'delete' }
+                        ];
+                    }
+                }
+                return [];
+            };
+
+            $("#gridContainer").dxDataGrid({
+                dataSource: employees,
+                paging: {
+                    pageSize: 6
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [5, 10, 20]
+                },
+                editing: {
+                    editMode: 'row',
+                    editEnabled: true
+                },
+                rowPrepared: function ($row, rowOptions) {
+                    $row.on("dxcontextmenu", function (e) {
+                        gridContextMenu.option({
+                            onPositioning: function (actionArgs) {
+                                var contextMenuInstance = actionArgs.component,
+                                    items = getContextMenuItems($row);
+
+                                if (items.length) {
+                                    contextMenuInstance.option('items', items);
+                                }
+                            },
+                            target: $("#gridContainer").dxDataGrid("instance").element().find(".dx-datagrid-rowsview"),
+
+                            itemClickAction: function (options) {
+                                switch (options.itemData.text) {
+                                    case "edit":
+                                        $("#gridContainer").dxDataGrid("instance").editRow(rowOptions.rowIndex);
+                                        break;
+                                    case "insert":
+                                        $("#gridContainer").dxDataGrid("instance").insertRow();
+                                        break;
+                                    case "delete":
+                                        $("#gridContainer").dxDataGrid("instance").removeRow(rowOptions.rowIndex);
+                                        break;
+
+                                }
+                            }
+                        });
+                        e.preventDefault();
+                    });
+                },
+                columns: ['FirstName', 'LastName', 'Title', 'City', 'Country']
+            });
+
+
+        });
+
+    </script>
+</head>
+<body id="form">
+
+    <div id="gridContainer"></div>
+
+
+</body>
+</html>
