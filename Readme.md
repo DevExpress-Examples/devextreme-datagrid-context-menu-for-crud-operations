@@ -1,5 +1,5 @@
 <!-- default file list -->
-*Files to look at*:
+*Files to look at*: [index.html](/JS/index.html)
 
 <!-- default file list end -->
 # DataGrid - How to implement a context menu for editing, adding and deleting rows
