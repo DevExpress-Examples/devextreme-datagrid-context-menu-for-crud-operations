@@ -28,8 +28,8 @@ In the event handler, do the following:
 ## Files to Look At
 
 **jQuery**:
-- [index.html](/JQuery/index.html)
-- [script.js](/JQuery/script.js)
+- [index.html](/jQuery/index.html)
+- [script.js](/jQuery/script.js)
 
 ## Documentation
 
