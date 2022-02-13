@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
 
-# DevExtreme Data Grid - How to implement a context menu to edit, add, and delete rows
+# DevExtreme DataGrid - How to implement a context menu to edit, add, and delete rows
 
 This example demonstrates how to create a custom context menu to implement CRUD operations.
 
