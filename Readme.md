@@ -38,4 +38,4 @@ In the event handler, do the following:
 
 ## More Examples
 
-[How to implement CRUD operations via API controllers in an ASP.NET Core with Razor Pages project](https://github.com/DevExpress-Examples/devextreme-datasource-CRUD-operations-ASP.NET-Core)
+[How to implement CRUD operations using API controllers in an ASP.NET Core with Razor Pages project](https://github.com/DevExpress-Examples/devextreme-datasource-CRUD-operations-ASP.NET-Core)
