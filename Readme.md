@@ -25,7 +25,7 @@ In the event handler, do the following:
 - In the corresponding **onItemClick** event handler, call the [editRow](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#editRowrowIndex), [addRow](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#addRow), or [deleteRow](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#deleteRowrowIndex) methods to edit the current row, add a new row, or remove the current row.
 
 
-## Files to Look At
+## Files to Review
 
 **jQuery**:
 - [index.html](/jQuery/index.html)
