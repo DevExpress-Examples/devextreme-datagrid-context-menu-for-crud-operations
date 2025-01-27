@@ -1,8 +1,6 @@
 import { Component } from "@angular/core";
 import { Service } from "./app.service";
 
-import validationEngine from "devextreme/ui/validation_engine";
-
 @Component({
   selector: 'app-root',
   providers: [Service],
@@ -41,7 +39,6 @@ export class AppComponent {
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
-    console.log(this.employees);
   }
   
 }
