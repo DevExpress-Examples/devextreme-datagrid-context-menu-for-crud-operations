@@ -1,26 +1,12 @@
-<<<<<<< HEAD
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
-=======
->>>>>>> b023638 (Added Angular implementation)
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-<<<<<<< HEAD
       "jasmine"
     ]
   },
-=======
-      "jasmine",
-      "node"
-    ]
-  },
-  "files": [
-    "src/test.ts",
-    "src/polyfills.ts"
-  ],
->>>>>>> b023638 (Added Angular implementation)
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
