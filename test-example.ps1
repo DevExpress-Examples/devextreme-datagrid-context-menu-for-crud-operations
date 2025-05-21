@@ -1,35 +1,15 @@
-# For local testing, you can pass branchName and/or buildVersion.
-# If both parameters are specified, only buildVersion will be used.
+# For local testing, you can pass buildVersion.
 # Example usage:
-# ./test-example.ps1 -branchName 23.1.3+
 # ./test-example.ps1 -buildVersion 23.1.13
 param (
-    [string]$branchName = [Environment]::GetEnvironmentVariable("BRANCH_NAME", [EnvironmentVariableTarget]::Machine),
-    [string]$buildVersion = [Environment]::GetEnvironmentVariable("BUILD_VERSION", [EnvironmentVariableTarget]::Machine)
+    [string]$buildVersion = $Env:CodeCentralBuildVersion
 )
 
-# Repository's branch name, e.g. 24.1.3+
-$global:BRANCH_NAME = $branchName
-# Masstest-specific parameter. Specifies the minor version (example: '21.1.5') !or daily build (example: '21.2.2005')
+# Masstest-specific parameter. Specifies the minor version (example: '21.1.5')
 $global:BUILD_VERSION = $buildVersion
 
 $global:ERROR_CODE = 0
 $global:FAILED_PROJECTS = @()
-
-$global:ALL_VERSIONS = @(
-    "14.1", "14.2",
-    "15.1", "15.2",
-    "16.1", "16.2",
-    "17.1", "17.2",
-    "18.1", "18.2",
-    "19.1", "19.2",
-    "20.1", "20.2",
-    "21.1", "21.2",
-    "22.1", "22.2",
-    "23.1", "23.2",
-    "24.1", "24.2",
-    "25.1", "25.2" 
-)
 
 function Install-Packages {
     param (
@@ -37,16 +17,59 @@ function Install-Packages {
         [string[]]$packages,
         [string]$buildVersion
     )
+
     Write-Output "`nInstalling packages in folder: $folderName"
-    
-    $packageList = $packages | ForEach-Object { "$_@$buildVersion" }
-    Write-Output "`nPackages to install: $($packageList -join ", ")"
-    # TODO: Uninstall DevExtreme packages to avoid potential peer-dependency issues
-    npm install @($packageList) --save --save-exact --no-fund
-    if (-not $?) {
-        Write-Error "`nERROR: Failed to install DevExtreme packages in $folderName"
-        throw "Installation failed in $folderName"
+
+    # Loop through each package and install it individually
+    foreach ($package in $packages) {
+        $packageVersion = Get-ValidNpmVersion -PackageName $package -Version $buildVersion
+        $packageWithVersion = "$package@$packageVersion"
+        Write-Output "Installing $packageWithVersion..."
+
+        npm install --save --save-exact --no-fund --loglevel=error --force $packageWithVersion
+        if (-not $?) {
+            Write-Error "`nERROR: Failed to install $packageWithVersion in $folderName"
+            throw "Installation failed for $packageWithVersion in $folderName"
+        }
     }
+
+    Write-Output "`nAll packages installed successfully in $folderName"
+}
+
+function Get-ValidNpmVersion {
+    param (
+        [string]$PackageName,
+        [string]$Version
+    )
+
+    function Test-NpmVersionExists {
+        param ([string]$Pkg, [string]$Ver)
+        npm view "$Pkg@$Ver" > $null 2>&1
+        return ($LASTEXITCODE -eq 0)
+    }
+
+    Write-Host "Checking $PackageName@$Version..."
+    if (Test-NpmVersionExists -Pkg $PackageName -Ver $Version) {
+        Write-Host "$PackageName@$Version exists."
+        return $Version
+    }
+
+    try {
+        $v = [version]$Version
+        $fallback = "$($v.Major).$($v.Minor)-stable"
+    } catch {
+        Write-Host "Invalid version format: $Version"
+        return $null
+    }
+
+    Write-Host "$PackageName@$Version not found. Trying fallback: $PackageName@$fallback..."
+    if (Test-NpmVersionExists -Pkg $PackageName -Ver $fallback) {
+        Write-Host "$PackageName@$fallback exists (fallback)."
+        return $fallback
+    }
+
+    Write-Host "Neither $PackageName@$Version nor @$fallback exist."
+    return $null
 }
 
 function Build-Project {
@@ -98,6 +121,9 @@ function Process-JavaScriptProjects {
         Push-Location $folderName
 
         try {
+            Write-Output "`nRemoving node_modules & package-lock.json: $pwd"
+            Remove-Item -Recurse -Force node_modules -ErrorAction SilentlyContinue
+            Remove-Item -Force package-lock.json -ErrorAction SilentlyContinue
             Install-Packages -folderName $folderName -packages $packages -buildVersion $buildVersion
             Write-Output "`nInstalling remaining packages in $folderName"
             npm install --save --save-exact --no-fund --loglevel=error
@@ -155,71 +181,17 @@ function Process-DotNetProjects {
     Write-Output "`nCompleted .NET project processing."
 }
 
-function Set-BuildVersion {
-    Write-Output "`n--== Starting Set-BuildVersion process. ==--"
-
-    $BUILD_VERSION = $global:BUILD_VERSION
-    if ($BUILD_VERSION) {
-        Write-Output "BUILD_VERSION is already set: $BUILD_VERSION"
-        return
-    }
-
-    $BUILD_VERSIONS_LIST = "BUILD_VERSIONS_LIST"
-
-    $inputMajorMinor = $global:BRANCH_NAME -replace "\.\d+\+$", ""
-    Write-Output "Extracted major.minor version from branch name: $inputMajorMinor"
-
-    $filteredList = $global:ALL_VERSIONS | Where-Object {
-        ($_ -replace "\." -as [double]) -ge ($inputMajorMinor -replace "\." -as [double])
-    }
-    Write-Output "Filtered versions list: $filteredList"
-
-    $currentValue = [Environment]::GetEnvironmentVariable($BUILD_VERSIONS_LIST, [EnvironmentVariableTarget]::Machine)
-    $currentList = if ($currentValue) {
-        $currentValue -split ";"
-    } else {
-        $filteredList
-    }
-    Write-Output "Current versions list: $currentList"
-
-    if ($currentList.Count -gt 1) {
-        $inputMajorMinor = $currentList[0]
-        $updatedList = $currentList[1..($currentList.Count - 1)]
-    } else {
-        Write-Output "The list in the environment variable has only one item."
-        $inputMajorMinor = $currentList[0]
-        $updatedList = @()
-    }
-
-    $global:BUILD_VERSION = $inputMajorMinor
-    Write-Output "BUILD_VERSION set to: $global:BUILD_VERSION"
-
-    $newValue = $updatedList -join ";"
-    [Environment]::SetEnvironmentVariable($BUILD_VERSIONS_LIST, $newValue, [EnvironmentVariableTarget]::Machine)
-
-    Write-Output "Environment variable '$BUILD_VERSIONS_LIST' updated."
-    Write-Output "New list: $updatedList"
-}
-
 function Write-BuildInfo {
-    $BRANCH_NAME = if ($global:BRANCH_NAME -ne $null -and $global:BRANCH_NAME -ne "") { 
-        $global:BRANCH_NAME 
-    } else { 
-        "(empty)" 
-    }
-
     $BUILD_VERSION = if ($global:BUILD_VERSION -ne $null -and $global:BUILD_VERSION -ne "") { 
         $global:BUILD_VERSION 
     } else { 
         "(empty)" 
     }
 
-    Write-Output "`nBranch Name: $BRANCH_NAME"
     Write-Output "Build Version: $BUILD_VERSION"
 }
 
 Write-BuildInfo
-Set-BuildVersion
 Process-JavaScriptProjects -buildVersion $global:BUILD_VERSION
 Process-DotNetProjects
 
