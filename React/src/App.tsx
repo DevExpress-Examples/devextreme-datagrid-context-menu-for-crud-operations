@@ -2,32 +2,35 @@ import React, { useCallback } from 'react';
 import './App.css';
 import 'devextreme/dist/css/dx.material.blue.light.compact.css';
 import DataGrid, {
-  Column, Paging, Pager, Editing,
+  Column, Paging, Pager, Editing, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { employees } from './data';
 
 const allowedPageSizes = [5, 10, 20];
 
 function App(): JSX.Element {
-  const onContextMenuPreparing = useCallback((e: any): void => {
-    if (e.row.rowType === 'data') {
+  const onContextMenuPreparing = useCallback((e: DataGridTypes.ContextMenuPreparingEvent): void => {
+    if (e.row?.rowType === 'data') {
+      const rowIndex = e.row.rowIndex;
+      if (e.rowIndex === undefined) return;
       e.items = [
         {
           text: 'edit',
           onItemClick(): void {
-            e.component.editRow(e.row.rowIndex);
+            e.component.editRow(rowIndex);
           },
         },
         {
           text: 'insert',
-          onItemClick(): void {
-            e.component.addRow();
+          // eslint-disable-next-line @typescript-eslint/space-before-function-paren
+          onItemClick: async(): Promise<void> => {
+            await e.component.addRow();
           },
         },
         {
           text: 'delete',
           onItemClick(): void {
-            e.component.deleteRow(e.row.rowIndex);
+            e.component.deleteRow(rowIndex);
           },
         },
       ];
