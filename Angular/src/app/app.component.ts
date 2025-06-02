@@ -1,18 +1,23 @@
-import { Component } from "@angular/core";
-import { Service } from "./app.service";
+import { Component } from '@angular/core';
 import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { Service } from './app.service';
 
 @Component({
   selector: 'app-root',
   providers: [Service],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   employees: any;
+
   readonly allowedPageSizes = [5, 10, 20];
 
-  onContextMenuPreparing(e: DxDataGridTypes.ContextMenuPreparingEvent){
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+  }
+
+  onContextMenuPreparing(e: DxDataGridTypes.ContextMenuPreparingEvent): void {
     if (e.row?.rowType === 'data') {
       const rowIndex = e.row.rowIndex;
       if (e.rowIndex === undefined) return;
@@ -25,7 +30,7 @@ export class AppComponent {
         },
         {
           text: 'insert',
-          onItemClick: async(): Promise<void> => {
+          onItemClick: async (): Promise<void> => {
             await e.component.addRow();
           },
         },
@@ -38,9 +43,4 @@ export class AppComponent {
       ];
     }
   }
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
-  
 }
