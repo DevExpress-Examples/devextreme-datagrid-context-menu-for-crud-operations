@@ -7,7 +7,7 @@ import {
   DxPaging,
   type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
- 
+
 import { employees } from '../data';
 
 const allowedPageSizes = [5, 10, 20];
@@ -47,13 +47,13 @@ const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparingEvent): v
       key-expr="ID"
       @context-menu-preparing="onContextMenuPreparing"
     >
-      <DxColumn data-field="FirstName" />
-      <DxColumn data-field="LastName" />
-      <DxColumn data-field="Title" />
-      <DxColumn data-field="City" />
-      <DxColumn data-field="Country" />
+      <DxColumn data-field="FirstName"/>
+      <DxColumn data-field="LastName"/>
+      <DxColumn data-field="Title"/>
+      <DxColumn data-field="City"/>
+      <DxColumn data-field="Country"/>
 
-      <DxPaging :page-size="10" />
+      <DxPaging :page-size="10"/>
       <DxPager
         :visible="true"
         :allowed-page-sizes="allowedPageSizes"
