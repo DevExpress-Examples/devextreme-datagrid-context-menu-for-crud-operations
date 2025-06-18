@@ -7,7 +7,7 @@ using ASP_NET_Core.Models;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace ASP_NET_Core.Controllers
 {
@@ -25,8 +25,7 @@ namespace ASP_NET_Core.Controllers
         [HttpPost]
         public IActionResult Post(string values)
         {
-            var newItem = new Employee();
-            JsonConvert.PopulateObject(values, newItem);
+            var newItem = JsonSerializer.Deserialize<Employee>(values);
             EmployeesData.Employees.Add(newItem);
             return Ok();
         }
@@ -35,7 +34,14 @@ namespace ASP_NET_Core.Controllers
         public IActionResult Put(int key, string values)
         {
             var employee = EmployeesData.Employees.FirstOrDefault(e => e.ID == key);
-            JsonConvert.PopulateObject(values, employee);
+            if (employee != null)
+            {
+                var updatedEmployee = JsonSerializer.Deserialize<Employee>(values);
+                employee.ID = updatedEmployee.ID;
+                employee.FirstName = updatedEmployee.FirstName;
+                employee.LastName = updatedEmployee.LastName;
+                employee.City = updatedEmployee.City;
+            }
             return Ok();
         }
 
