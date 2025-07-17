@@ -1,49 +1,50 @@
-<!-- default badges list -->
-![](https://img.shields.io/endpoint?url=https://codecentral.devexpress.com/api/v1/VersionRange/128583131/25.1.2%2B)
-[![](https://img.shields.io/badge/Open_in_DevExpress_Support_Center-FF7200?style=flat-square&logo=DevExpress&logoColor=white)](https://supportcenter.devexpress.com/ticket/details/T123309)
-[![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
-[![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
-<!-- default badges end -->
+# jQuery DevExtreme Example
 
-# DataGrid for DevExtreme - How to implement a context menu to edit, add, and delete rows
+## Installation
 
-This example demonstrates how to create a custom context menu to implement CRUD operations.
+Download the example and use NPM to install required libraries.
 
-![context-menu](custom-context-menu.png)
+```
+npm install
+```
 
-## Implementation Details
+This project includes:
+- DevExtreme 25.1.3
+- jQuery 3.7.1
+- lite-server for development
+- ESLint, Stylelint, and Prettier for code quality
 
-Handle the [onContextMenuPreparing](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onContextMenuPreparing) event to create a custom context menu.
+## Code
 
-In the event handler, do the following:
+Take a look at the following files of this example to see the required code:
 
-- Check if the current row is the data row. 
+**Source Files:**
+- `src/index.html` - Main HTML file with DevExtreme component setup
+- `src/index.js` - JavaScript code with DevExtreme component initialization
+- `src/index.css` - Custom styles for the application
 
-- Add the "edit", "insert", and "delete" items to the [e.items](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxContextMenu/Configuration/items/) array. 
+**Configuration Files:**
+- `package.json` - NPM dependencies and scripts
+- `bs-config.json` - Lite-server configuration
+- `favicon.ico` - Application icon
 
-- For each item, specify [text](https://js.devexpress.com/jQuery/Documentation/ApiReference/UI_Components/dxContextMenu/Configuration/items/#text) and handle the [onItemClick](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxContextMenu/Configuration/#onItemClick) event. 
-  
-- In the corresponding **onItemClick** event handler, call the [editRow](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#editRowrowIndex), [addRow](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#addRow), or [deleteRow](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#deleteRowrowIndex) methods to edit the current row, add a new row, or remove the current row.
+## Development server
 
+Run the `npm start` command to run the development server. The application will be available at:
+```
+http://localhost:5050/src/index.html
+```
 
-## Files to Review
+## Linting and Code Quality
 
-**jQuery**:
-- [index.html](/jQuery/index.html)
-- [script.js](/jQuery/script.js)
+This project includes several code quality tools:
+- `npm run lint` - Run all linting checks
+- `npm run lint-js` - ESLint for JavaScript files
+- `npm run lint-css` - Stylelint for CSS files  
+- `npm run lint-html` - Prettier for HTML formatting
 
-## Documentation
+## Further help
 
-- [Getting Started with DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Getting_Started_with_DataGrid/)
-- [DataGrid- API Reference](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/)
+You can learn more about jQuery API in the [jQuery documentation](https://api.jquery.com/).
 
-## More Examples
-
-[How to implement CRUD operations using API controllers in an ASP.NET Core with Razor Pages project](https://github.com/DevExpress-Examples/devextreme-datasource-CRUD-operations-ASP.NET-Core)
-<!-- feedback -->
-## Does this example address your development requirements/objectives?
-
-[<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=devextreme-datagrid-context-menu-for-crud-operations&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=devextreme-datagrid-context-menu-for-crud-operations&~~~was_helpful=no)
-
-(you will be redirected to DevExpress.com to submit your response)
-<!-- feedback end -->
+To get more help on DevExtreme submit an issue in the [Support Center](https://supportcenter.devexpress.com/ticket/create)
