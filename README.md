@@ -13,7 +13,7 @@ This example demonstrates how to create a custom context menu to implement CRUD 
 
 ## Implementation Details
 
-Handle the [onContextMenuPreparing](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onContextMenuPreparing) event to create a custom context menu.
+Handle the [onContextMenuPreparing](https://go.devexpress.com/DevExtreme_Documentation_dxDataGrid_onContextMenuPreparing.aspx) event to create a custom context menu.
 
 In the event handler, do the following:
 
