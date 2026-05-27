@@ -4,7 +4,7 @@ import 'devextreme/dist/css/dx.material.blue.light.compact.css';
 import DataGrid, {
   Column, Paging, Pager, Editing, type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import { employees } from './data';
+import { employees } from './data.tsx';
 
 const allowedPageSizes = [5, 10, 20];
 
@@ -22,7 +22,7 @@ function App(): JSX.Element {
         },
         {
           text: 'insert',
-          // eslint-disable-next-line @typescript-eslint/space-before-function-paren
+          // eslint-disable-next-line @stylistic/space-before-function-paren
           onItemClick: async(): Promise<void> => {
             await e.component.addRow();
           },
