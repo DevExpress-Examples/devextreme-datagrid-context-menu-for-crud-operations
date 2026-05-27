@@ -4,25 +4,25 @@
   keyExpr="ID"
   (onContextMenuPreparing)="onContextMenuPreparing($event)"
 >
-  <dxi-column dataField="FirstName"></dxi-column>
-  <dxi-column dataField="LastName"></dxi-column>
-  <dxi-column dataField="Title"></dxi-column>
-  <dxi-column dataField="City"></dxi-column>
-  <dxi-column dataField="Country"></dxi-column>
+  <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Title"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Country"></dxi-data-grid-column>
 
-  <dxo-paging [pageSize]="10"> </dxo-paging>
-  <dxo-pager
+  <dxo-data-grid-paging [pageSize]="10"> </dxo-data-grid-paging>
+  <dxo-data-grid-pager
     [visible]="true"
     [allowedPageSizes]="allowedPageSizes"
     [showPageSizeSelector]="true"
   >
-  </dxo-pager>
+  </dxo-data-grid-pager>
 
-  <dxo-editing
+  <dxo-data-grid-editing
     mode="row"
     [allowUpdating]="true"
     [allowDeleting]="true"
     [allowAdding]="true"
   >
-  </dxo-editing>
+  </dxo-data-grid-editing>
 </dx-data-grid>

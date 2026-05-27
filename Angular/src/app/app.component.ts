@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import {DxDataGridTypes, DxDataGridModule} from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 @Component({
   selector: 'app-root',
+  imports: [DxDataGridModule],
   providers: [Service],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
