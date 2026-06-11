@@ -22,8 +22,7 @@ function App(): JSX.Element {
         },
         {
           text: 'insert',
-          // eslint-disable-next-line @stylistic/space-before-function-paren
-          onItemClick: async(): Promise<void> => {
+          onItemClick: async (): Promise<void> => {
             await e.component.addRow();
           },
         },
