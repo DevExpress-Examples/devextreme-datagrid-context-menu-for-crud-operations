@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {DxDataGridTypes, DxDataGridModule} from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
@@ -7,6 +7,7 @@ import { Service } from './app.service';
   imports: [DxDataGridModule],
   providers: [Service],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
